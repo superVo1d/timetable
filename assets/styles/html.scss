@@ -1,0 +1,45 @@
+@import 'mixins';
+
+* {
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 62.5%;
+  height: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--background-color);
+  font-family: ALSGorizont, sans-serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  height: 100%;
+  line-height: 1;
+
+  @include clearfix()
+}
+
+a,
+a:visited {
+  color: inherit;
+  text-decoration: unset;
+}
+
+button, input[type="submit"], input[type="reset"] {
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
+input {
+  all: unset;
+}

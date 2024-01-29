@@ -1,0 +1,20 @@
+@use 'sass:list';
+
+@mixin font($font-typography) {
+  font-size: list.nth($font-typography, 1);
+  line-height: list.nth($font-typography, 2);
+  font-weight: list.nth($font-typography, 3);
+}
+
+@mixin clearfix() {
+  &::before,
+  &::after{
+    content: ' ';
+    display: table;
+  }
+}
+
+@mixin max-width() {
+  margin: 0 auto;
+  max-width: 40rem;
+}

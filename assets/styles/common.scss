@@ -1,0 +1,10 @@
+:root {
+  --main-color: #000;
+  --main-color-20: rgba(0, 0, 0, 0.2);
+  --disabled-color: #cfcfcf;
+  --background-color: #fe7e0d;
+}
+
+body.modal {
+  overflow: hidden;
+}
