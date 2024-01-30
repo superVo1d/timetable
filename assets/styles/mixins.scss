@@ -18,3 +18,11 @@
   margin: 0 auto;
   max-width: 40rem;
 }
+
+@mixin hover() {
+  @media (hover: hover) {
+    &:hover {
+      @content;
+    }
+  }
+}

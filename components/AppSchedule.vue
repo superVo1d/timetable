@@ -12,7 +12,14 @@
         </div>
       </div>
       <div class="schedule-item__body">
-        <div v-for="({ time, date }, intervalIndex) in intervals" :key="intervalIndex" class="schedule-item__time" tabindex="0" @click="handleOnClickTime(date)">
+        <div
+          v-for="({ time, date }, intervalIndex) in intervals"
+          :key="intervalIndex"
+          class="schedule-item__time"
+          :class="{active: date === activeDate}"
+          tabindex="0"
+          @click="handleOnClickTime(date)"
+        >
           <div>
             {{ time }}
           </div>
@@ -23,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import _ from 'lodash'
 import { storeToRefs } from 'pinia'
 import { useModalStore, useTimetableStore } from '../store'
@@ -35,11 +42,15 @@ const { weekDates } = storeToRefs(timetableStore)
 
 const modal = useModalStore()
 
-const handleOnClickTime = (data: Date) => {
+const activeDate = ref()
+
+const handleOnClickTime = (date: Date) => {
+  activeDate.value = date
+
   modal.open(AppForm,
     {
-      callback: (dataFromView) => {
-        console.log(dataFromView, data)
+      callback: (data) => {
+        console.log(data, activeDate.value)
         modal.close()
       }
     }
@@ -131,6 +142,11 @@ const days = computed(() => {
       &:focus {
         background: #fff;
         color: var(--main-color);
+      }
+
+      &.active {
+        background: var(--main-color);
+        color: #fff;
       }
     }
   }

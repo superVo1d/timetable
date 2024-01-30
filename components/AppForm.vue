@@ -7,6 +7,7 @@
           <input
             ref="nameInput"
             v-model="name"
+            autocomplete="name"
             name="name"
             placeholder="Имя"
             type="text"
@@ -36,6 +37,7 @@ const emit = defineEmits(['update:modelValue', 'submit', 'close'])
 const handleSubmit = ($event: Event) => {
   $event.preventDefault()
 
+  emit('update:modelValue', { name: name.value })
   emit('submit')
 }
 
