@@ -5,13 +5,11 @@
     <AppFooter />
   </NuxtLayout>
 </template>
-<script>
+<script setup lang="ts">
 import AppNavbar from './components/AppNavbar.vue'
 import AppFooter from './components/AppFooter.vue'
 import AppSchedule from './components/AppSchedule.vue'
-export default {
-  components: { AppSchedule, AppFooter, AppNavbar }
-}
+
 </script>
 <style lang="scss">
   .navbar {

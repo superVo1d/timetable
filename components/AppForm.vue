@@ -17,7 +17,14 @@
           >
         </div>
         <button :disabled="!isValid" type="submit" class="form__submit">
-          Записаться
+          <span>
+            <template v-if="isSubmitting">
+              <AppLoader class="loader" />
+            </template>
+            <template v-else>
+              Записаться
+            </template>
+          </span>
         </button>
       </form>
     </FocusTrap>
@@ -27,10 +34,16 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import { FocusTrap } from 'focus-trap-vue'
+import { storeToRefs } from 'pinia'
 import { useLocalStorage } from '../composables'
+import { useTimetableStore } from '../store'
 
 const { item: name } = useLocalStorage('name')
 const isValid = ref(name.value.length > 0)
+
+const timetable = useTimetableStore()
+
+const { isSubmitting } = storeToRefs(timetable)
 
 const emit = defineEmits(['update:modelValue', 'submit', 'close'])
 
@@ -92,6 +105,17 @@ watch(name, () => {
       padding: 3.5rem 0 4.8rem;
       transition: background-color 0.4s ease-in-out;
       width: 100%;
+
+      > span {
+        height: 4rem;
+      }
+
+      .loader {
+        height: 4rem;
+        position: relative;
+        top: 0.4rem;
+        width: 4rem;
+      }
 
       &:disabled {
         background: var(--disabled-color);

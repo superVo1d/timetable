@@ -13,12 +13,12 @@
       </div>
       <div class="schedule-item__body">
         <div
-          v-for="({ time, date }, intervalIndex) in intervals"
+          v-for="({ time, date, occupied }, intervalIndex) in intervals"
           :key="intervalIndex"
           class="schedule-item__time"
-          :class="{active: date === activeDate}"
+          :class="{active: date === activeDate, occupied }"
           tabindex="0"
-          @click="handleOnClickTime(date)"
+          @click="!occupied && handleOnClickTime(date)"
         >
           <div>
             {{ time }}
@@ -38,11 +38,12 @@ import { capitalize } from '../helpers'
 import AppForm from './AppForm.vue'
 
 const timetableStore = useTimetableStore()
-const { weekDates } = storeToRefs(timetableStore)
+
+const { weekDates, schedule } = storeToRefs(timetableStore)
 
 const modal = useModalStore()
 
-const activeDate = ref()
+const activeDate = ref<Date | null>()
 
 const handleOnClickTime = (date: Date) => {
   activeDate.value = date
@@ -50,8 +51,13 @@ const handleOnClickTime = (date: Date) => {
   modal.open(AppForm,
     {
       callback: (data) => {
-        console.log(data, activeDate.value)
-        modal.close()
+        timetableStore.addEvent({
+          name: data.name.toString(),
+          date: (activeDate.value as Date).toISOString()
+        }).then(() => {
+          modal.close()
+          activeDate.value = null
+        })
       }
     }
   )
@@ -65,11 +71,12 @@ const days = computed(() => {
       day: 'numeric'
     }),
     intervals: _.range(7, 23).map((hours: number) => {
-      const interval = new Date(date.setHours(hours, 0, 0))
+      const interval = new Date(date.setHours(hours, 0, 0, 0))
 
       return {
         time: interval.toLocaleTimeString('ru-RU', { hour: 'numeric', minute: '2-digit' }),
-        date: interval
+        date: interval,
+        occupied: !!schedule.value.filter(({ date }) => new Date(date).getTime() === interval.getTime())[0]
       }
     })
   }))
@@ -84,6 +91,11 @@ const days = computed(() => {
 
     border-left: 0.1rem solid var(--main-color);
     border-right: 0.1rem solid var(--main-color);
+
+    @media (max-width: 40rem) {
+      border-left: unset;
+      border-right: unset;
+    }
 
     &__header {
       @include font($font-body);
@@ -139,14 +151,21 @@ const days = computed(() => {
         border-right: none;
       }
 
-      &:focus {
+      @media (max-width: 40rem) {
+        font-size: 7.5vw;
+      }
+
+      &:focus,
+      &.active {
         background: #fff;
         color: var(--main-color);
       }
 
-      &.active {
+      &.occupied {
         background: var(--main-color);
+        cursor: default;
         color: #fff;
+        pointer-events: none;
       }
     }
   }

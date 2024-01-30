@@ -36,10 +36,6 @@ const timetableStore = useTimetableStore()
 const { incrementWeek } = timetableStore
 const { currentDay, weekDates } = storeToRefs(timetableStore)
 
-if (!process.client && weekDifference.value && weekDifference.value !== '') {
-  await incrementWeek(parseInt(weekDifference.value as string))
-}
-
 const changeWeek = (offset: number) => {
   weekDifference.value = (weekDifference.value ? parseInt(weekDifference.value as string) : 0) + offset
   router.push({ query: { ...route.query, week: weekDifference.value.toString() } })
