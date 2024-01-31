@@ -18,7 +18,7 @@
         </div>
         <button :disabled="!isValid" type="submit" class="form__submit">
           <span>
-            <template v-if="isSubmitting">
+            <template v-if="isLoaderVisible">
               <AppLoader class="loader" />
             </template>
             <template v-else>
@@ -44,6 +44,14 @@ const isValid = ref(name.value.length > 0)
 const timetable = useTimetableStore()
 
 const { isSubmitting } = storeToRefs(timetable)
+
+const isLoaderVisible = ref<boolean>(false)
+
+watch(isSubmitting, () => {
+  if (isSubmitting) {
+    isLoaderVisible.value = true
+  }
+})
 
 const emit = defineEmits(['update:modelValue', 'submit', 'close'])
 
