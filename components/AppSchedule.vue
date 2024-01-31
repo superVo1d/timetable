@@ -88,7 +88,7 @@ const days = computed(() => {
 onMounted(() => {
   days.value.forEach(({ dateRaw }, index) => {
     if (new Date(new Date().setHours(0, 0, 0, 0)).getTime() === new Date(dateRaw.setHours(0, 0, 0, 0)).getTime()) {
-      daysRef.value[index].scrollIntoView({ behavior: 'smooth' })
+      daysRef.value[index].scrollIntoView({ block: 'start', behavior: 'smooth' })
     }
   })
 })
@@ -102,6 +102,7 @@ onMounted(() => {
 
     border-left: 0.1rem solid var(--main-color);
     border-right: 0.1rem solid var(--main-color);
+    scroll-margin-top: 132px;
 
     @media (max-width: 400px) {
       border-left: unset;
