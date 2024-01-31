@@ -13,7 +13,6 @@
             type="text"
             min="1"
             max="20"
-            @input="handleInput()"
           >
         </div>
         <button :disabled="!isValid" type="submit" class="form__submit">
@@ -53,21 +52,16 @@ watch(isSubmitting, () => {
   }
 })
 
-const emit = defineEmits(['update:modelValue', 'submit', 'close'])
+const emit = defineEmits(['submit', 'close'])
 
 const handleSubmit = ($event: Event) => {
   $event.preventDefault()
 
-  emit('update:modelValue', { name: name.value })
-  emit('submit')
+  emit('submit', { name: name.value })
 }
 
 const close = () => {
   emit('close')
-}
-
-const handleInput = () => {
-  emit('update:modelValue', { name: name.value })
 }
 
 watch(name, () => {

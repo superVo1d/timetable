@@ -5,21 +5,19 @@
   <transition name="slide-in" appear>
     <div v-if="isOpen" class="modal">
       <FocusTrap>
-        <component :is="view" v-model="model" class="modal-view" @close="modal.close()" @submit="actions?.callback(model)" />
+        <component :is="view" class="modal-view" @close="modal.close()" @submit="actions?.callback" />
       </FocusTrap>
     </div>
   </transition>
 </template>
 
 <script setup lang="ts">
-import { reactive, watch } from 'vue'
+import { watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { FocusTrap } from 'focus-trap-vue'
 import { useModalStore } from '../store'
 
 const modal = useModalStore()
-
-const model = reactive({})
 
 const { isOpen, view, actions } = storeToRefs(modal)
 
