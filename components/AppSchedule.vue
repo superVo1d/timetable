@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="({ name, date, intervals }, index) in days" :key="index" class="schedule-item">
+    <div v-for="({ name, date, intervals }, index) in days" :key="index" :ref="(el) => (daysRef[index] = el)" class="schedule-item">
       <div class="schedule-item__header">
         <div>
           <div class="schedule-item__name">
@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import _ from 'lodash'
 import { storeToRefs } from 'pinia'
 import { useModalStore, useTimetableStore } from '../store'
@@ -40,6 +40,8 @@ import AppForm from './AppForm.vue'
 const timetableStore = useTimetableStore()
 
 const { weekDates, schedule } = storeToRefs(timetableStore)
+
+const daysRef = ref<{ [name: string]: Element }>({})
 
 const modal = useModalStore()
 
@@ -70,6 +72,7 @@ const days = computed(() => {
       month: 'long',
       day: 'numeric'
     }),
+    dateRaw: date,
     intervals: _.range(7, 23).map((hours: number) => {
       const interval = new Date(date.setHours(hours, 0, 0, 0))
 
@@ -80,6 +83,14 @@ const days = computed(() => {
       }
     })
   }))
+})
+
+onMounted(() => {
+  days.value.forEach(({ dateRaw }, index) => {
+    if (new Date(new Date().setHours(0, 0, 0, 0)).getTime() === new Date(dateRaw.setHours(0, 0, 0, 0)).getTime()) {
+      daysRef.value[index].scrollIntoView({ behavior: 'smooth' })
+    }
+  })
 })
 </script>
 
@@ -92,7 +103,7 @@ const days = computed(() => {
     border-left: 0.1rem solid var(--main-color);
     border-right: 0.1rem solid var(--main-color);
 
-    @media (max-width: 40rem) {
+    @media (max-width: 400px) {
       border-left: unset;
       border-right: unset;
     }
@@ -151,7 +162,7 @@ const days = computed(() => {
         border-right: none;
       }
 
-      @media (max-width: 40rem) {
+      @media (max-width: 400px) {
         font-size: 7.5vw;
       }
 
