@@ -15,16 +15,10 @@ export default defineNuxtConfig({
               '@import "@/assets/styles/variables/typography.scss";'
         }
       }
-    },
-    server: {
-      proxy: {
-        '/api': {
-          target: process.env.PROXY_API || 'http://0.0.0.0:8000',
-          changeOrigin: true,
-          rewrite: (path: string) => path.replace(/^\/api/, '')
-        }
-      }
     }
+  },
+  runtimeConfig: {
+    proxyApi: 'http://0.0.0.0:8000'
   },
   modules: [
     '@pinia/nuxt'

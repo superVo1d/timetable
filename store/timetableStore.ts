@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useRuntimeConfig } from 'nuxt/app'
 import { IAddEventParams, IScheduleItem, ITimetableStoreState } from '../@types'
 
 export const useTimetableStore = defineStore('timetable', {
@@ -7,7 +8,8 @@ export const useTimetableStore = defineStore('timetable', {
   }),
   getters: {
     weekDates: (state) => {
-      const firstDay = new Date(state.currentDay.setDate(state.currentDay.getDate() - (state.currentDay.getDay() + 6) % 7))
+      const date = new Date(state.currentDay.getTime())
+      const firstDay = new Date(date.setDate(state.currentDay.getDate() - (date.getDay() + 6) % 7))
 
       const result = []
 
@@ -20,12 +22,13 @@ export const useTimetableStore = defineStore('timetable', {
   },
   actions: {
     incrementWeek (offset: number) {
-      this.currentDay = new Date(this.currentDay.setDate(this.currentDay.getDate() + 7 * offset))
+      const date = new Date(this.currentDay.getTime())
+      this.currentDay = new Date(date.setDate(date.getDate() + 7 * offset))
 
       this.fetchSchedule()
     },
     async fetchSchedule () {
-      const data = await $fetch('http://0.0.0.0:8000', {
+      const data = await $fetch('/api', {
         query: {
           dt: `${this.currentDay.getFullYear()}-${this.currentDay.getMonth() + 1}-${this.currentDay.getDate()}`
         }

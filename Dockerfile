@@ -29,10 +29,7 @@ ENV NUXT_HOST=0.0.0.0
 ENV NUXT_PORT=$PORT
 
 # Set the base url
-ENV PROXY_API=$PROXY_API
-
-# Set the browser base url
-ENV PROXY_LOGIN=$PROXY_LOGIN
+ENV NUXT_PROXY_API=$PROXY_API
 
 COPY --from=build /src/.output /src/.output
 
