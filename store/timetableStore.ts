@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { useRuntimeConfig } from 'nuxt/app'
 import { IAddEventParams, IScheduleItem, ITimetableStoreState } from '../@types'
 
 export const useTimetableStore = defineStore('timetable', {
@@ -28,6 +27,8 @@ export const useTimetableStore = defineStore('timetable', {
       this.fetchSchedule()
     },
     async fetchSchedule () {
+      this.schedule = []
+
       const data = await $fetch('/api', {
         query: {
           dt: `${this.currentDay.getFullYear()}-${this.currentDay.getMonth() + 1}-${this.currentDay.getDate()}`

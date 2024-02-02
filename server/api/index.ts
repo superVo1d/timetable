@@ -6,7 +6,5 @@ export default defineEventHandler(async (event) => {
   const path = event.path.replace(/^\/api/, '')
   const target = joinURL(proxyApi, path)
 
-  console.log({ target })
-
   return proxyRequest(event, target)
 })

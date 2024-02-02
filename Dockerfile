@@ -22,14 +22,11 @@ FROM base
 
 EXPOSE $PORT
 
-# Set host to localhost / the docker image
 ENV NUXT_HOST=0.0.0.0
 
-# Set app port
 ENV NUXT_PORT=$PORT
 
-# Set the base url
-ENV NUXT_PROXY_API=$PROXY_API
+ENV NUXT_PROXY_API='http://timetable-api:8000/'
 
 COPY --from=build /src/.output /src/.output
 

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-for="({ name, date, intervals }, index) in days" :key="index" :ref="(el) => (daysRef[index] = el)" class="schedule-item">
+    <div v-for="({ name, date, intervals }, index) in days" :key="date" :ref="(el) => (daysRef[index] = el)" class="schedule-item">
       <div class="schedule-item__header">
         <div>
           <div class="schedule-item__name">
