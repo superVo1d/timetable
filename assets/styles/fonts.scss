@@ -1,41 +1,81 @@
+/* ALSGorizont2.1-ThinExpanded */
 @font-face {
   font-family: ALSGorizont;
-  src: url("../fonts/ALS_Gorizont_Thin Expanded_2.1.otf");
   font-weight: 100;
-  font-style: normal;
+  src: url('../fonts/ALSGorizont2.1-ThinExpanded.eot');
+  src: url('../fonts/ALSGorizont2.1-ThinExpanded.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/ALSGorizont2.1-ThinExpanded.woff') format('woff'),
+  url('../fonts/ALSGorizont2.1-ThinExpanded.woff2') format('woff2');
 }
 
+/* ALS_Gorizont_Light Expanded_2.1 */
 @font-face {
   font-family: ALSGorizont;
-  src: url("../fonts/ALS_Gorizont_Light Expanded_2.1.otf");
-  font-weight: 200;
-  font-style: normal;
+  font-weight: 300;
+  src: url('../fonts/ALS_Gorizont_Light Expanded_2.1.otf') format('opentype');
+  src: url('../fonts/ALSGorizont2.1-LightExpanded.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/ALSGorizont2.1-LightExpanded.woff') format('woff'),
+  url('../fonts/ALSGorizont2.1-LightExpanded.woff2') format('woff2');
 }
 
+/* ALS_Gorizont_Regular Expanded_2.1 */
 @font-face {
   font-family: ALSGorizont;
-  src: url("../fonts/ALS_Gorizont_Regular Expanded_2.1.otf");
   font-weight: 400;
-  font-style: normal;
+  src: url('../fonts/ALS_Gorizont_Regular Expanded_2.1.otf') format('opentype');
+  src: url('../fonts/ALSGorizont2.1-RegularExpanded.eot'),
+  url('../fonts/ALSGorizont2.1-RegularExpanded.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/ALSGorizont2.1-RegularExpanded.woff') format('woff'),
+  url('../fonts/ALSGorizont2.1-RegularExpanded.woff2') format('woff2');
 }
 
+/* ALSGorizont2.1-MediumExpanded */
 @font-face {
   font-family: ALSGorizont;
-  src: url("../fonts/ALS_Gorizont_Medium Expanded_2.1.otf");
   font-weight: 500;
-  font-style: normal;
+  src: url('../fonts/ALSGorizont2.1-MediumExpanded.eot');
+  src: url('../fonts/ALSGorizont2.1-MediumExpanded.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/ALSGorizont2.1-MediumExpanded.woff') format('woff'),
+  url('../fonts/ALSGorizont2.1-MediumExpanded.woff2') format('woff2');
 }
 
+/* ALS_Gorizont_Bold Expanded_2.1 */
 @font-face {
   font-family: ALSGorizont;
-  src: url("../fonts/ALS_Gorizont_Bold Expanded_2.1.otf");
   font-weight: 600;
-  font-style: normal;
+  src: url('../fonts/ALS_Gorizont_Bold Expanded_2.1.otf') format('opentype');
+  src: url('../fonts/ALSGorizont2.1-BoldExpanded.eot');
+  src: url('../fonts/ALSGorizont2.1-BoldExpanded.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/ALSGorizont2.1-BoldExpanded.woff') format('woff'),
+  url('../fonts/ALSGorizont2.1-BoldExpanded.woff2') format('woff2');
 }
 
+/* ALSGorizont2.1-BoldExpanded */
 @font-face {
   font-family: ALSGorizont;
-  src: url("../fonts/ALS_Gorizont_Extra Bold Expanded_2.1.otf");
+  font-weight: 600;
+  src: url('../fonts/ALSGorizont2.1-BoldExpanded.eot');
+  src: url('../fonts/ALSGorizont2.1-BoldExpanded.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/ALSGorizont2.1-BoldExpanded.woff') format('woff'),
+  url('../fonts/ALSGorizont2.1-BoldExpanded.woff2') format('woff2');
+}
+
+/* ALSGorizont2.1-ExtraBoldExpanded */
+@font-face {
+  font-family: ALSGorizont;
   font-weight: 800;
-  font-style: normal;
+  src: url('../fonts/ALSGorizont2.1-ExtraBoldExpanded.eot');
+  src: url('../fonts/ALSGorizont2.1-ExtraBoldExpanded.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/ALSGorizont2.1-ExtraBoldExpanded.woff') format('woff'),
+  url('../fonts/ALSGorizont2.1-ExtraBoldExpanded.woff2') format('woff2');
+}
+
+/* ALSGorizont2.1-Black */
+@font-face {
+  font-family: ALSGorizont;
+  font-weight: 900;
+  src: url('../fonts/ALSGorizont2.1-Black.eot');
+  src: url('../fonts/ALSGorizont2.1-Black.eot?#iefix') format('embedded-opentype'),
+  url('../fonts/ALSGorizont2.1-Black.woff') format('woff'),
+  url('../fonts/ALSGorizont2.1-Black.woff2') format('woff2');
 }
