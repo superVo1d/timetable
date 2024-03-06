@@ -9,7 +9,7 @@
             v-model="name"
             autocomplete="name"
             name="name"
-            placeholder="Имя"
+            placeholder="Имя Фамилия"
             type="text"
             min="1"
             max="20"
