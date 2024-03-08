@@ -26,6 +26,7 @@
     "lodash": "^4.17.21",
     "nuxt-proxy": "^0.4.1",
     "pinia": "^2.1.7",
-    "sass": "^1.70.0"
+    "sass": "^1.70.0",
+    "yandex-metrika-module-nuxt3": "^1.5.3"
   }
 }

@@ -21,6 +21,14 @@ export default defineNuxtConfig({
     proxyApi: 'http://0.0.0.0:8000'
   },
   modules: [
-    '@pinia/nuxt'
-  ]
+    '@pinia/nuxt',
+    'yandex-metrika-module-nuxt3'
+  ],
+  yandexMetrika: {
+    id: '96689624',
+    clickmap: true,
+    trackLinks: true,
+    accurateTrackBounce: true,
+    webvisor: true
+  }
 })
