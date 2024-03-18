@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import _ from 'lodash'
 import { storeToRefs } from 'pinia'
 import { useModalStore, useTimetableStore } from '../store'
@@ -125,9 +125,13 @@ const getDays: () => DayInterface[] = () => {
   }))
 }
 
-if (process.server) {
+if (!process.client) {
   days.value = getDays()
 }
+
+watch(schedule, () => {
+  days.value = getDays()
+}, { deep: true })
 
 onMounted(() => {
   days.value = getDays()
