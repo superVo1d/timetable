@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { IAddEventParams, IScheduleItem, ITimetableStoreState } from '../@types'
+import { IAddEventParams, IScheduleItem, ITimetableStoreState } from '../types'
 
 export const useTimetableStore = defineStore('timetable', {
   state: (): ITimetableStoreState => ({

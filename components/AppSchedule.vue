@@ -13,12 +13,12 @@
       </div>
       <div class="schedule-item__body">
         <div
-          v-for="({ time, date, occupied }, intervalIndex) in intervals"
+          v-for="({ time, date, eventId, my }, intervalIndex) in intervals"
           :key="intervalIndex"
           class="schedule-item__time"
-          :class="{active: date === activeDate, occupied }"
+          :class="{active: date === activeDate, occupied: eventId, my }"
           tabindex="0"
-          @click="!occupied && handleOnClickTime(date)"
+          @click="!eventId && handleOnClickTime(date)"
         >
           <div>
             {{ time }}
@@ -35,11 +35,31 @@ import _ from 'lodash'
 import { storeToRefs } from 'pinia'
 import { useModalStore, useTimetableStore } from '../store'
 import { capitalize } from '../helpers'
+import { useLocalStorage } from '../composables'
+import { type IAddEventParams } from '../types'
 import AppForm from './AppForm.vue'
 
 const timetableStore = useTimetableStore()
-
 const { weekDates, schedule } = storeToRefs(timetableStore)
+
+const { item: events } = useLocalStorage('events')
+
+interface EventInterface {
+  time: string;
+  date: Date;
+  eventId?: string;
+  name?: string;
+  my: boolean;
+}
+
+interface DayInterface {
+  name: string;
+  date: string;
+  dateRaw: Date;
+  intervals: EventInterface[];
+}
+
+const days = ref<DayInterface[]>([])
 
 const daysRef = ref<{ [name: string]: Element }>({})
 
@@ -53,10 +73,14 @@ const handleOnClickTime = (date: Date) => {
   modal.open(AppForm,
     {
       callback: (data) => {
-        timetableStore.addEvent({
+        const event: IAddEventParams = {
           name: data.name.toString(),
           date: (activeDate.value as Date).toISOString()
-        }).then(() => {
+        }
+
+        events.value = JSON.stringify([...JSON.parse(events.value || '[]'), event])
+
+        timetableStore.addEvent(event).then(() => {
           modal.close()
           activeDate.value = null
         })
@@ -65,7 +89,7 @@ const handleOnClickTime = (date: Date) => {
   )
 }
 
-const days = computed(() => {
+const getDays: () => DayInterface[] = () => {
   return weekDates.value.map(date => ({
     name: capitalize(date.toLocaleDateString('ru-RU', { weekday: 'long' })),
     date: date.toLocaleDateString('ru-RU', {
@@ -74,20 +98,42 @@ const days = computed(() => {
     }),
     dateRaw: date,
     intervals: _.range(7, 23).map((hours: number) => {
-      const interval = new Date(date.setHours(hours, 0, 0, 0))
+      const interval = new Date(date)
+      interval.setHours(hours, 0, 0, 0)
+      const intervalEnd = new Date(interval)
+      intervalEnd.setHours(interval.getHours() + 1)
+
+      const eventAtDate = schedule.value.filter(({ date, dateEnd }) => {
+        const startTime = new Date(date).getTime()
+        const endTime = new Date(dateEnd).getTime()
+
+        return startTime < intervalEnd.getTime() && endTime > interval.getTime()
+      })[0]
+
+      const my = JSON.parse(events.value || '[]').some((event: IAddEventParams) =>
+        new Date(event.date).getTime() === new Date(interval).getTime()
+      )
 
       return {
         time: interval.toLocaleTimeString('ru-RU', { hour: 'numeric', minute: '2-digit' }),
         date: interval,
-        occupied: !!schedule.value.filter(({ date }) => new Date(date).getTime() === interval.getTime())[0]
+        eventId: eventAtDate?.id,
+        name: eventAtDate?.name,
+        my
       }
     })
   }))
-})
+}
+
+if (process.server) {
+  days.value = getDays()
+}
 
 onMounted(() => {
-  days.value.forEach(({ dateRaw }, index) => {
-    if (new Date(new Date().setHours(0, 0, 0, 0)).getTime() === new Date(dateRaw.setHours(0, 0, 0, 0)).getTime()) {
+  days.value = getDays()
+
+  days.value.forEach((day, index) => {
+    if (new Date(new Date().setHours(0, 0, 0, 0)).getTime() === new Date(day.dateRaw.setHours(0, 0, 0, 0)).getTime()) {
       daysRef.value[index].scrollIntoView({ block: 'start', behavior: 'smooth' })
     }
   })
@@ -127,14 +173,10 @@ onMounted(() => {
     }
 
     &:first-child {
-      #{$selector}__header {
-        border-top: unset;
-        padding-top: 0;
-        top: 14.6rem;
+      margin-top: -1.4rem;
 
-        > div {
-          border-top: unset;
-        }
+      #{$selector}__header {
+        border-top: 0;
       }
     }
 
@@ -167,17 +209,18 @@ onMounted(() => {
         font-size: 7.5vw;
       }
 
-      &:focus,
-      &.active {
-        background: #fff;
-        color: var(--main-color);
-      }
-
       &.occupied {
         background: var(--main-color);
         cursor: default;
         color: #fff;
         pointer-events: none;
+      }
+
+      &.my,
+      &:focus,
+      &.active {
+        background: #fff;
+        color: var(--main-color);
       }
     }
   }
