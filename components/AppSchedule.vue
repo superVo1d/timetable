@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import _ from 'lodash'
 import { storeToRefs } from 'pinia'
 import { useModalStore, useTimetableStore } from '../store'
@@ -89,7 +89,7 @@ const handleOnClickTime = (date: Date) => {
   )
 }
 
-const getDays: () => DayInterface[] = () => {
+const getDays = () => {
   return weekDates.value.map(date => ({
     name: capitalize(date.toLocaleDateString('ru-RU', { weekday: 'long' })),
     date: date.toLocaleDateString('ru-RU', {
@@ -125,17 +125,15 @@ const getDays: () => DayInterface[] = () => {
   }))
 }
 
-if (!process.client) {
+onMounted(() => {
   days.value = getDays()
-}
+})
 
-watch(schedule, () => {
+watch([schedule, events], () => {
   days.value = getDays()
 }, { deep: true })
 
 onMounted(() => {
-  days.value = getDays()
-
   days.value.forEach((day, index) => {
     if (new Date(new Date().setHours(0, 0, 0, 0)).getTime() === new Date(day.dateRaw.setHours(0, 0, 0, 0)).getTime()) {
       daysRef.value[index].scrollIntoView({ block: 'start', behavior: 'smooth' })
