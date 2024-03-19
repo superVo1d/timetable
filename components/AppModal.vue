@@ -28,6 +28,21 @@ watch(isOpen, () => {
     document.body.classList.remove('modal')
   }
 })
+
+const handleKeyDown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape') {
+    modal.close()
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('keydown', handleKeyDown)
+})
+
+onBeforeUnmount(() => {
+  document.removeEventListener('keydown', handleKeyDown)
+})
+
 </script>
 
 <style lang="scss" scoped>

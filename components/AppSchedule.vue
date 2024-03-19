@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-for="({ name, date, intervals }, index) in days" :key="date" :ref="(el) => (daysRef[index] = el)" class="schedule-item">
-      <div class="schedule-item__header">
+      <div class="schedule-item__header" @click="deselectDate()">
         <div>
           <div class="schedule-item__name">
             {{ name }}
@@ -59,13 +59,15 @@ interface DayInterface {
   intervals: EventInterface[];
 }
 
-const days = ref<DayInterface[]>([])
-
 const daysRef = ref<{ [name: string]: Element }>({})
 
 const modal = useModalStore()
 
 const activeDate = ref<Date | null>()
+
+const deselectDate = () => {
+  activeDate.value = null
+}
 
 const handleOnClickTime = (date: Date) => {
   activeDate.value = date
@@ -89,7 +91,7 @@ const handleOnClickTime = (date: Date) => {
   )
 }
 
-const getDays = () => {
+const getDays = (withMyEvents: boolean = false) => {
   return weekDates.value.map(date => ({
     name: capitalize(date.toLocaleDateString('ru-RU', { weekday: 'long' })),
     date: date.toLocaleDateString('ru-RU', {
@@ -97,7 +99,7 @@ const getDays = () => {
       day: 'numeric'
     }),
     dateRaw: date,
-    intervals: _.range(7, 23).map((hours: number) => {
+    intervals: _.range(8, 23).map((hours: number) => {
       const interval = new Date(date)
       interval.setHours(hours, 0, 0, 0)
       const intervalEnd = new Date(interval)
@@ -110,7 +112,7 @@ const getDays = () => {
         return startTime < intervalEnd.getTime() && endTime > interval.getTime()
       })[0]
 
-      const my = JSON.parse(events.value || '[]').some((event: IAddEventParams) =>
+      const my = withMyEvents && !!eventAtDate && JSON.parse(events.value || '[]').some((event: IAddEventParams) =>
         new Date(event.date).getTime() === new Date(interval).getTime()
       )
 
@@ -125,20 +127,27 @@ const getDays = () => {
   }))
 }
 
-onMounted(() => {
-  days.value = getDays()
-})
-
-watch([schedule, events], () => {
-  days.value = getDays()
-}, { deep: true })
-
-onMounted(() => {
-  days.value.forEach((day, index) => {
+const scrollToDay = () => {
+  days.value?.forEach((day, index) => {
     if (new Date(new Date().setHours(0, 0, 0, 0)).getTime() === new Date(day.dateRaw.setHours(0, 0, 0, 0)).getTime()) {
       daysRef.value[index].scrollIntoView({ block: 'start', behavior: 'smooth' })
     }
   })
+}
+
+const days = ref<DayInterface[]>(getDays())
+
+watch([schedule, events], () => {
+  days.value = getDays(true)
+  scrollToDay()
+}, { deep: true })
+
+onMounted(() => {
+  days.value = getDays(true)
+
+  setTimeout(() => {
+    scrollToDay()
+  }, 0)
 })
 </script>
 
@@ -202,6 +211,7 @@ onMounted(() => {
       border-right: 0.1rem solid var(--main-color);
       cursor: pointer;
       padding: 1.8rem 0 1.2rem 1.2rem;
+      transition: color .2s cubic-bezier(.165,.84,.44,1), background .2s cubic-bezier(.165,.84,.44,1);
 
       &:nth-child(3n + 3) {
         border-right: none;
@@ -222,6 +232,7 @@ onMounted(() => {
       &:focus,
       &.active {
         background: #fff;
+        box-shadow: 0 0 1rem 0.4rem rgba(255, 255, 255, 0.4);
         color: var(--main-color);
       }
     }
