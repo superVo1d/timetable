@@ -39,6 +39,9 @@ import { useLocalStorage } from '../composables'
 import { type IAddEventParams } from '../types'
 import AppForm from './AppForm.vue'
 
+const START_HOUR = 7
+const END_HOUR = 23
+
 const timetableStore = useTimetableStore()
 const { weekDates, schedule } = storeToRefs(timetableStore)
 
@@ -99,7 +102,7 @@ const getDays = (withMyEvents: boolean = false) => {
       day: 'numeric'
     }),
     dateRaw: date,
-    intervals: _.range(8, 23).map((hours: number) => {
+    intervals: _.range(START_HOUR, END_HOUR).map((hours: number) => {
       const interval = new Date(date)
       interval.setHours(hours, 0, 0, 0)
       const intervalEnd = new Date(interval)
